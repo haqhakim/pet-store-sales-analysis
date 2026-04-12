@@ -29,7 +29,7 @@ As mentioned above, the tables in this project are Sales, Customers, and Product
 
 ### Data Cleaning
 
-**Check Missing Values**
+Check Missing Values
 ```sql
 SELECT
 COUNT(*) AS total_rows,
@@ -42,3 +42,5 @@ COUNTIF(quantity IS NULL) AS missing_quantity,
 COUNTIF(total_amount IS NULL) AS missing_total_amount
 FROM `pet_store.sales`;
 ```
+![Result Check Missing Values](img/1. Check Missing Values.PNG)
+
