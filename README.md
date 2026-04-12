@@ -29,7 +29,7 @@ As mentioned above, the tables in this project are Sales, Customers, and Product
 
 ### Data Cleaning
 
-Check Missing Values
+**Check Missing Values**
 ```sql
 SELECT
 COUNT(*) AS total_rows,
@@ -42,5 +42,37 @@ COUNTIF(quantity IS NULL) AS missing_quantity,
 COUNTIF(total_amount IS NULL) AS missing_total_amount
 FROM `pet_store.sales`;
 ```
-![Result Check Missing Values](img/1. Check Missing Values.PNG)
+![Result Check Missing Values](img/Check_Missing_Values.PNG) <br>
+*There are 9615 missing values for Customer_id*
 
+**How much does the missing values represent the total row?**
+```sql
+SELECT
+ROUND(
+  (COUNT(*) - COUNT(customer_id))*100.0/COUNT(*),2
+) AS missing_percentage
+FROM `pet_store.sales`;
+```
+![Missing Percentage](img/Missing_persentage.PNG) <br>
+*Approximately 4.43% of rows contained missing customer IDs*
+
+**Investigate the transaction type of the missing values**
+```sql
+SELECT
+transaction_type,
+COUNT(*) AS total,
+COUNT(customer_id) AS with_customer,
+COUNT(*) - COUNT(customer_id) AS missing_customer
+FROM `pet_store.sales`
+GROUP BY transaction_type;
+```
+![Missing_values_by_transaction_type](img/missing_values_by_transaction_type.PNG) <br>
+*The missing values only occur in retail transactions and likely represent walk-in customers who completed purchases without registering an account. As the proportion of missing values is relatively small, these rows were retained in the dataset*
+
+**Check duplicate values**
+```sql
+SELECT transaction_id, COUNT(*)
+FROM `pet_store.sales`
+GROUP BY transaction_id
+HAVING COUNT(*) > 1;
+```
