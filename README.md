@@ -76,3 +76,14 @@ FROM `pet_store.sales`
 GROUP BY transaction_id
 HAVING COUNT(*) > 1;
 ```
+![Transaction_id_duplicates](img/Transaction_id_duplicates.PNG)
+*Several transaction IDs were found to be duplicated*
+
+**Check a sample of the duplicated transaction IDs**
+```sql
+SELECT *
+FROM `pet_store.sales`
+WHERE transaction_id = 15838236;
+```
+![Transaction_id_detail](img/Transaction_id_sample.PNG)
+*During data validation, several transaction_id values were linked to multiple customers and transaction dates, indicating that the field is not globally unique and may represent multiple transactions*
