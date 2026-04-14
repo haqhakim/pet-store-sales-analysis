@@ -27,7 +27,7 @@ As mentioned above, the tables in this project are Sales, Customers, and Product
 2. Customers: customer_id, contact_name, vip_customer_flag
 3. Products: product_id, product_name, category
 
-### Data Cleaning
+### Data Validation
 
 **Check Missing Values**
 ```sql
