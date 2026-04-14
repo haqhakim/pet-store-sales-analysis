@@ -93,3 +93,55 @@ WHERE transaction_id = 15838236;
 *During data validation, several transaction_id values were linked to multiple customers and transaction dates, indicating that the field is not globally unique and may represent multiple transactions*<br>
 <br>
 <br>
+
+To resolve this issue, a new transaction key was created using a composite identifier combining transaction_id, customer_id, and transaction_date. This ensured accurate transaction counting and prevented aggregation errors in downstream analysis.
+```sql
+SELECT *,
+CONCAT(
+transaction_id,'_',
+COALESCE(CAST(customer_id AS STRING),'guest'),'_',
+transaction_date
+) AS transaction_key
+FROM `pet_store.sales`;
+```
+![Transaction_key](img/transaction_key.PNG)<br>
+
+**validate uniqueness**
+```sql
+SELECT
+COUNT(*) AS total_rows,
+COUNT(DISTINCT transaction_key) AS unique_transaction_keys
+FROM (
+SELECT
+CONCAT(
+CAST(transaction_id AS STRING),'_',
+COALESCE(CAST(customer_id AS STRING),'guest'),'_',
+CAST(transaction_date AS STRING)
+) AS transaction_key
+FROM `pet_store.sales`
+);
+```
+![Unique_Transaction_key](img/unique_transaction_key.PNG)<br>
+*There were only 124835 unique transaction_key out of 217107 total row*<br>
+
+**Check wether this is product-level rows**
+```sql
+SELECT
+transaction_key,
+COUNT(*) AS items_in_transaction
+FROM (
+SELECT
+CONCAT(
+CAST(transaction_id AS STRING),'_',
+COALESCE(CAST(customer_id AS STRING),'guest'),'_',
+CAST(transaction_date AS STRING)
+) AS transaction_key
+FROM `pet_store.sales`
+)
+GROUP BY transaction_key
+ORDER BY items_in_transaction DESC
+LIMIT 10;
+```
+![Items_in_Transaction_key](img/items_in_transaction.PNG)<br>
+*After creating a composite transaction_key, it was observed that the number of unique transaction keys was smaller than the total number of rows. This indicates that the dataset is structured at the line-item level, where a single transaction can contain multiple products. Therefore, the transaction_key represents a unique transaction, while each row represents an individual product purchased within that transaction*
+
