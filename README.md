@@ -45,7 +45,7 @@ FROM `pet_store.sales`;
 ![Result Check Missing Values](img/Check_Missing_Values.PNG) <br>
 *There are 9615 missing values for Customer_id*<br>
 <br>
-
+<br>
 **How much does the missing values represent the total row?**
 ```sql
 SELECT
@@ -56,6 +56,7 @@ FROM `pet_store.sales`;
 ```
 ![Missing Percentage](img/Missing_persentage.PNG) <br>
 *Approximately 4.43% of rows contained missing customer IDs*<br>
+<br>
 <br>
 **Investigate the transaction type of the missing values**
 ```sql
@@ -70,6 +71,7 @@ GROUP BY transaction_type;
 ![Missing_values_by_transaction_type](img/missing_values_by_transaction_type.PNG) <br>
 *The missing values only occur in retail transactions and likely represent walk-in customers who completed purchases without registering an account. As the proportion of missing values is relatively small, these rows were retained in the dataset*<br>
 <br>
+<br>
 **Check duplicate values**
 ```sql
 SELECT transaction_id, COUNT(*)
@@ -80,6 +82,7 @@ HAVING COUNT(*) > 1;
 ![Transaction_id_duplicates](img/Transaction_id_duplicates.PNG)<br>
 *Several transaction IDs were found to be duplicated*<br>
 <br>
+<br>
 **Check a sample of the duplicated transaction IDs**
 ```sql
 SELECT *
@@ -88,4 +91,5 @@ WHERE transaction_id = 15838236;
 ```
 ![Transaction_id_detail](img/Transaction_id_sample.PNG)<br>
 *During data validation, several transaction_id values were linked to multiple customers and transaction dates, indicating that the field is not globally unique and may represent multiple transactions*<br>
+<br>
 <br>
