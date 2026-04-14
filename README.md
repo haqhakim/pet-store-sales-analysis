@@ -105,7 +105,8 @@ transaction_date
 FROM `pet_store.sales`;
 ```
 ![Transaction_key](img/transaction_key.PNG)<br>
-
+<br>
+<br>
 **validate uniqueness**
 ```sql
 SELECT
@@ -123,7 +124,8 @@ FROM `pet_store.sales`
 ```
 ![Unique_Transaction_key](img/unique_transaction_key.PNG)<br>
 *There were only 124835 unique transaction_key out of 217107 total row*<br>
-
+<br>
+<br>
 **Check wether this is product-level rows**
 ```sql
 SELECT
@@ -143,8 +145,9 @@ ORDER BY items_in_transaction DESC
 LIMIT 10;
 ```
 ![Items_in_Transaction_key](img/items_in_transaction.PNG)<br>
-<small>*After creating a composite transaction_key, it was observed that the number of unique transaction keys was smaller than the total number of rows. This indicates that the dataset is structured at the line-item level, where a single transaction can contain multiple products. Therefore, the transaction_key represents a unique transaction, while each row represents an individual product purchased within that transaction*<small>
-
+<small>*After creating a composite transaction_key, it was observed that the number of unique transaction keys was smaller than the total number of rows. This indicates that the dataset is structured at the line-item level, where a single transaction can contain multiple products. Therefore, the transaction_key represents a unique transaction, while each row represents an individual product purchased within that transaction*<small><br>
+<br>
+<br>
 **Check is there any row that is completely duplicated**
 ```sql
 SELECT
@@ -166,3 +169,30 @@ total_amount
 HAVING COUNT(*) > 1;
 ```
 ![Duplicated_row](img/completely_duplicated_row.PNG)<br>
+*Result is zero*<br>
+<br>
+<br>
+**Check how many unique product**
+```sql
+SELECT
+  COUNT(DISTINCT product_id) AS unique_products
+FROM `pet_store.sales`;
+```
+![unique_product](img/unique_product.PNG)<br>
+*There are 21 unique products*<br>
+<br>
+<br>
+
+**Check Negative Values**
+```sql
+SELECT *
+FROM `pet_store.sales`
+WHERE quantity <= 0
+OR total_amount <= 0
+OR product_id <= 0;
+```
+![negative_values](img/negative_values.PNG)<br>
+*There is no negative values*<br>
+<br>
+<br>
+
