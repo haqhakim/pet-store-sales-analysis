@@ -143,5 +143,26 @@ ORDER BY items_in_transaction DESC
 LIMIT 10;
 ```
 ![Items_in_Transaction_key](img/items_in_transaction.PNG)<br>
-*After creating a composite transaction_key, it was observed that the number of unique transaction keys was smaller than the total number of rows. This indicates that the dataset is structured at the line-item level, where a single transaction can contain multiple products. Therefore, the transaction_key represents a unique transaction, while each row represents an individual product purchased within that transaction*
+<small>*After creating a composite transaction_key, it was observed that the number of unique transaction keys was smaller than the total number of rows. This indicates that the dataset is structured at the line-item level, where a single transaction can contain multiple products. Therefore, the transaction_key represents a unique transaction, while each row represents an individual product purchased within that transaction*<small>
 
+**Check is there any row that is completely duplicated**
+```sql
+SELECT
+customer_id,
+transaction_id,
+product_id,
+transaction_date,
+quantity,
+total_amount,
+COUNT(*) AS duplicate_count
+FROM `pet_store.sales`
+GROUP BY
+customer_id,
+transaction_id,
+product_id,
+transaction_date,
+quantity,
+total_amount
+HAVING COUNT(*) > 1;
+```
+![Duplicated_row](img/completely_duplicated_row.PNG)<br>
